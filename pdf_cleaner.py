@@ -38,6 +38,7 @@ def remove_leading_zeros(text):
     result = re.sub(pattern, r'\1', text)
     return result
 
+
 # Function to fix encoding issues
 def fix_encoding_issues(text):
     try:
@@ -55,6 +56,7 @@ def extract_title(text):
     if title_match:
         return title_match.group(1).strip()
     return None
+
 
 
 # Function to extract DOI
@@ -107,16 +109,8 @@ def check_pdf_path_exists(pdf_path):
         raise FileNotFoundError(f"PDF file not found: {pdf_path}")
     return True
 
-# Example usage:
-# check_pdf_path_exists('sample_eu.pdf')
 
-# Add relative import using poxi path
-# current_dir = Path(__file__).parent
-# Example: from . import some_module  # if you have a module in the same directory
-
-
-if __name__ == "__main__":
-    # Load the PDF file
+def load_pdf_and_extract_data(pdf_path):
     pdf_path = 'What_is_Sustainability-1.pdf'
     current_dir = Path(__file__).parent
     pdf_path = current_dir / "data" / pdf_path
@@ -142,9 +136,27 @@ if __name__ == "__main__":
         "FullTextURL": full_text_url,
         "FullTextContent": cleaned_content
     }
+    return extracted_data
+    
+    
 
+if __name__ == "__main__":
+    # Load the PDF file
+    pdf_path = 'What_is_Sustainability-1.pdf'
+    extracted_data = load_pdf_and_extract_data(pdf_path)
+    
     # Printing the results
     print("Title:", extracted_data["Title"])
     print("DOI:", extracted_data["DOI"])
     print("FullTextURL:", extracted_data["FullTextURL"])
-    print("\nFullTextContent (first 1000 characters):\n", extracted_data["FullTextContent"][:10000])
+    #print("\nFullTextContent (first 1000 characters):\n", extracted_data["FullTextContent"][:10000])
+    
+    # Save extracted data to a .txt file
+    output_path = Path(__file__).parent / "data" / "extracted_data.txt"
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(f"Title: {extracted_data['Title']}\n")
+        f.write(f"DOI: {extracted_data['DOI']}\n")
+        f.write(f"FullTextURL: {extracted_data['FullTextURL']}\n\n")
+        f.write("FullTextContent:\n")
+        f.write(extracted_data["FullTextContent"])
+    print(f"\nExtracted data saved to {output_path}")
