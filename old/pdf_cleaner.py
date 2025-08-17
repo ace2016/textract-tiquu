@@ -1,9 +1,9 @@
 import json
+import os
 import re
+from pathlib import Path
 
 import pdfplumber
-import os
-from pathlib import Path
 
 
 # Function to clean the text
@@ -100,7 +100,6 @@ def extract_fulltexturl(text):
         return url
     else:
         return ""
-    
 
 def check_pdf_path_exists(pdf_path):
     # Use pathlib for cross-platform compatibility
